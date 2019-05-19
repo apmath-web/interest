@@ -1,0 +1,15 @@
+language:
+  - go
+go:
+  - "1.11.x"
+before_script:
+  - go get -v github.com/gin-gonic/gin
+script:
+  - go build application.go
+  - go test ./... -cover -v
+  - docker build -t interests .
+  - docker run -d -p 8080:8080 --name interests_container interests
+  - curl http://127.0.0.1:8080/v1/hello_world/1
+  - docker stop interests_container
+  - docker rm interests_container
+  - docker rmi interests
