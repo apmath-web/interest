@@ -2,8 +2,8 @@ package viewModels
 
 import (
 	"encoding/json"
-	"github.com/apmath-web/expenses/Application/Validation"
-	"github.com/apmath-web/expenses/Domain"
+	"github.com/apmath-web/interests/Application/Validation"
+	"github.com/apmath-web/interests/Domain"
 )
 
 type IdsViewModel struct {
