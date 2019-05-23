@@ -1,8 +1,5 @@
 package models
 
-import (
-	"github.com/apmath-web/interests/Domain"
-)
 
 type PersonDomainModel struct {
 	FirstName string
