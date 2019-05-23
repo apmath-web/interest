@@ -9,6 +9,10 @@ type CalculationService struct {
 	clientFetcher Domain.ClientFetchInterface
 }
 
+func Calculate(persons []Domain.PersonDomainModelInterface) float64 {
+	return 7.5
+} 
+
 func (cs *CalculationService) Calculate(ids Domain.IdsDomainModelInterface) (Domain.InterestsInterface, error) {
 	var persons []Domain.PersonDomainModelInterface
 
@@ -26,7 +30,8 @@ func (cs *CalculationService) Calculate(ids Domain.IdsDomainModelInterface) (Dom
 		persons = append(persons, pdm)
 	}
 
-	var percent = models.Calculate(persons)
+	var percent = Calculate(persons)
+	
 	var interests = models.GenInterestsDomainModel(percent)
 
 	return interests, nil
