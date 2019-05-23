@@ -1,7 +1,7 @@
 package applicationModels
 
 type JobApplicationModel struct {
-	Name string
+	Name string `json:"name"`
 	Wage int
 }
 
