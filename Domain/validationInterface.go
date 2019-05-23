@@ -11,3 +11,4 @@ type ValidationInterface interface {
 type MessageInterface interface {
 	MarshalJSON() (b []byte, e error)
 }
+
