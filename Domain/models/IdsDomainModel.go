@@ -21,3 +21,4 @@ func GenIds(clientId int, coborrowersIdSlice []int) Domain.IdsDomainModelInterfa
 	idsModel.CoborrowersIdSlice = coborrowersIdSlice
 	return idsModel
 }
+
