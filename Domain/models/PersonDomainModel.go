@@ -22,7 +22,4 @@ func (person *PersonDomainModel) GetSumWage() int {
 	return person.SumWage
 }
 
-func Calculate(persons []Domain.PersonDomainModelInterface) float64 {
-	return 7.5
-} 
 
