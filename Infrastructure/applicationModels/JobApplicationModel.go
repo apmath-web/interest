@@ -2,7 +2,7 @@ package applicationModels
 
 type JobApplicationModel struct {
 	Name string `json:"name"`
-	Wage int
+	Wage int `json:"wage"`
 }
 
 func (job *JobApplicationModel) GetName() string {
