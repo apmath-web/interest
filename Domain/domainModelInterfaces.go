@@ -16,3 +16,4 @@ type InterestsInterface interface {
 	GetInterest() float64
 	SetInterest(amount float64)
 }
+
