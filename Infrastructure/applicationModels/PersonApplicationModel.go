@@ -43,3 +43,4 @@ func (person *PersonApplicationModel) GetSumWage() int {
 	}
 	return sum
 }
+
