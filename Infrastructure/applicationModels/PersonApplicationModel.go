@@ -33,7 +33,7 @@ func (person *PersonApplicationModel) UnmarshalJSON(b []byte) error {
 		return err
 	}
 	person.JsonPerson = tmpPerson
-	return err
+	return nil
 }
 
 func (person *PersonApplicationModel) GetSumWage() int {
