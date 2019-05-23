@@ -25,3 +25,4 @@ func (person *PersonDomainModel) GetSumWage() int {
 func Calculate(persons []Domain.PersonDomainModelInterface) float64 {
 	return 7.5
 } 
+
