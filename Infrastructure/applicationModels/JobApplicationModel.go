@@ -12,3 +12,4 @@ func (job *JobApplicationModel) GetName() string {
 func (job *JobApplicationModel) GetWage() int {
 	return job.Wage
 }
+
