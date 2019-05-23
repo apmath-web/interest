@@ -19,3 +19,4 @@ func GenInterestsDomainModel(interest float64) Domain.InterestsInterface {
 	dm.interest = interest
 	return dm
 }
+
