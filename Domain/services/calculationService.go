@@ -35,3 +35,4 @@ func (cs *CalculationService) Calculate(ids Domain.IdsDomainModelInterface) (Dom
 func (cs *CalculationService) GenCalculationService(clientFetch Domain.ClientFetchInterface) {
 	cs.clientFetcher = clientFetch
 }
+
