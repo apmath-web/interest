@@ -55,3 +55,6 @@ func (v *Validation) MarshalJSON() (b []byte, e error) {
 	})
 }
 
+func (m *Message) GetStringMessage() string {
+	return m.field + ": " + m.text
+}
