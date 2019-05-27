@@ -14,3 +14,4 @@ v1.POST("/:clientId", actions.GetInterests)
 }
 return router
 }
+
