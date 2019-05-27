@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/apmath-web/expenses/Application/routing"
+	"github.com/apmath-web/interests/Application/routing"
 	"log"
 )
 
