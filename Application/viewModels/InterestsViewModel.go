@@ -26,5 +26,5 @@ func (interestsViewModel *InterestsViewModel) MarshalJSON() (b []byte, e error) 
 }
 
 func (interestsViewModel *InterestsViewModel) Hydrate(interestsInerface Domain.InterestsInterface) {
-	interestsViewModel.interest = interestsInerface.GetInterest()
+	interestsViewModel.interest = interestsInterface.GetInterest()
 }
