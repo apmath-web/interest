@@ -2,24 +2,21 @@ package services
 
 import (
 	"github.com/apmath-web/interests/Domain"
-	"github.com/apmath-web/interests/Domain/models"
 )
 
 type CalculationService struct {
 	clientFetcher Domain.ClientFetchInterface
 }
 
-func Calculate(persons []Domain.PersonDomainModelInterface) float64 {
-	return 7.5
-} 
-
 func (cs *CalculationService) Calculate(ids Domain.IdsDomainModelInterface) (Domain.InterestsInterface, error) {
 	var persons []Domain.PersonDomainModelInterface
-
+	var calc = CalculateService{}
 	var pdm, err = cs.clientFetcher.Fetch(ids.GetClientId())
+
 	if err != nil {
 		return nil, err
 	}
+
 	persons = append(persons, pdm)
 
 	for _, value := range ids.GetCoborrowersIdSlice() {
@@ -30,14 +27,15 @@ func (cs *CalculationService) Calculate(ids Domain.IdsDomainModelInterface) (Dom
 		persons = append(persons, pdm)
 	}
 
-	var percent = Calculate(persons)
-	
-	var interests = models.GenInterestsDomainModel(percent)
+	interest, err := calc.Estimate(persons)
 
-	return interests, nil
+	if err != nil {
+		return nil, err
+	}
+
+	return interest, nil
 }
 
 func (cs *CalculationService) GenCalculationService(clientFetch Domain.ClientFetchInterface) {
 	cs.clientFetcher = clientFetch
 }
-

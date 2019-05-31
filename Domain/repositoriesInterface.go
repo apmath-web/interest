@@ -8,4 +8,3 @@ type repositoryInterface interface {
 type ClientFetchInterface interface {
 	Fetch(id int) (PersonDomainModelInterface, error)
 }
-
