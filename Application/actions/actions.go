@@ -5,7 +5,6 @@ import (
 	"github.com/apmath-web/interests/Application/Validation"
 	"github.com/apmath-web/interests/Application/viewModels"
 	"github.com/apmath-web/interests/Domain/models"
-	"github.com/apmath-web/interests/Domain/services"
 	"github.com/apmath-web/interests/Infrastructure"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -39,10 +38,10 @@ func GetInterests(c *gin.Context) {
 	}
 
 	dm := models.GenIds(clientId, vm.GetCoborrowersIdSlice())
-	service := services.CalculationService{}
 
 	clientFetchService := Infrastructure.GetServiceManager().GetClientFetchService()
-	service.GenCalculationService(clientFetchService)
+	service := Infrastructure.GetServiceManager().GetCalculationService(clientFetchService)
+
 	ei, err := service.Calculate(dm)
 
 	if err != nil {

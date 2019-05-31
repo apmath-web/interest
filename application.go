@@ -1,4 +1,3 @@
-
 package main
 
 import (
@@ -8,7 +7,7 @@ import (
 
 func main() {
 	router := routing.GenRouter()
-	err := router.Run("0.0.0.0:8080")
+	err := router.Run("0.0.0.0:8079")
 	if err != nil {
 		log.Fatal(err.Error())
 	}

@@ -2,6 +2,7 @@ package Infrastructure
 
 import (
 	"github.com/apmath-web/interests/Domain"
+	"github.com/apmath-web/interests/Domain/services"
 	"os"
 	"sync"
 )
@@ -24,4 +25,15 @@ func GetServiceManager() *serviceManager {
 		sm = &serviceManager{}
 	})
 	return sm
+}
+
+func (sm *serviceManager) GetCalculationService(clientFetch Domain.ClientFetchInterface) services.CalculationService {
+	calc := sm.GetCalculateService()
+	cs := services.GenCalculationService(clientFetch, calc)
+	return cs
+}
+
+func (sm *serviceManager) GetCalculateService() services.CalculateService {
+	cs := new(services.CalculateService)
+	return *cs
 }
