@@ -1,7 +1,7 @@
 package Infrastructure
 
 import (
-	"github.com/apmath-web/expenses/Domain"
+	"github.com/apmath-web/interests/Domain"
 	"os"
 	"sync"
 )

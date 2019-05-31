@@ -3,9 +3,9 @@ package Infrastructure
 import (
 	"encoding/json"
 	"errors"
-	"github.com/apmath-web/expenses/Domain"
-	"github.com/apmath-web/expenses/Infrastructure/Mapper"
-	"github.com/apmath-web/expenses/Infrastructure/applicationModels"
+	"github.com/apmath-web/interests/Domain"
+	"github.com/apmath-web/interests/Infrastructure/Mappers"
+	"github.com/apmath-web/interests/Infrastructure/applicationModels"
 	"net/http"
 	"strconv"
 )
@@ -43,6 +43,6 @@ func (clfs *clientFetchService) Fetch(id int) (Domain.PersonDomainModelInterface
 	if resp.StatusCode == http.StatusNotFound {
 		return nil, errors.New("client not found")
 	}
-	pdm := Mapper.PersonApplicationMapper(*person)
+	pdm := Mappers.PersonApplicationMapper(*person)
 	return pdm, nil
 }
