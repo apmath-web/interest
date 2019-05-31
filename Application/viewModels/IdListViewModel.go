@@ -4,24 +4,48 @@ import (
 	"encoding/json"
 	"github.com/apmath-web/interests/Application/Validation"
 	"github.com/apmath-web/interests/Domain"
+	"strconv"
 )
 
-type IdsViewModel struct {
-	CoborrowersIdSlice []int `json:"coBorrowers"`
-	validation Validation.Validation
+type JsonIds struct {
+	CoborrowersIdSlice []int `json:"coBorrowers"` //Cписок ID созаемщиков
 }
 
+type IdsViewModel struct {
+	JsonIds
+	validation Validation.Validation
+}
 
 func (idsViewModel *IdsViewModel) GetCoborrowersIdSlice() []int {
 	return idsViewModel.CoborrowersIdSlice
 }
 
-
 func (idsViewModel *IdsViewModel) validateCoBorrowerIdSlice() bool {
 	for _, id := range idsViewModel.CoborrowersIdSlice {
 		if id < 0 {
-			idsViewModel.validation.AddMessage(Validation.GenMessage("coBorrowers", "Is negative"))
+			str := "ID is negative: " + strconv.Itoa(id)
+			idsViewModel.validation.AddMessage(Validation.GenMessage("coBorrowers", str))
 			return false
+		}
+	}
+	for _, id := range idsViewModel.CoborrowersIdSlice {
+		if id < 0 {
+			str := "Is negative: " + strconv.Itoa(id)
+			idsViewModel.validation.AddMessage(Validation.GenMessage("coBorrowers", str))
+			return false
+		}
+		for _, firstId := range idsViewModel.CoborrowersIdSlice {
+			count := 0
+			for _, secondId := range idsViewModel.CoborrowersIdSlice {
+				if secondId == firstId {
+					count++
+				}
+			}
+			if count >= 2 {
+				str := "IDs are equal to each other: " + strconv.Itoa(firstId)
+				idsViewModel.validation.AddMessage(Validation.GenMessage("coBorrowers", str))
+				return false
+			}
 		}
 	}
 	return true
@@ -34,14 +58,13 @@ func (idsViewModel *IdsViewModel) Validate() bool {
 	return false
 }
 
-
 func (idsViewModel *IdsViewModel) UnmarshalJSON(b []byte) error {
-	tmpIds := idsViewModel.CoborrowersIdSlice
+	tmpIds := JsonIds{}
 	err := json.Unmarshal(b, &tmpIds)
 	if err := json.Unmarshal(b, &tmpIds); err != nil {
 		return err
 	}
-	idsViewModel.CoborrowersIdSlice = tmpIds
+	idsViewModel.JsonIds = tmpIds
 	return err
 }
 
