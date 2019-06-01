@@ -27,7 +27,8 @@ func GetServiceManager() *serviceManager {
 	return sm
 }
 
-func (sm *serviceManager) GetCalculationService(clientFetch Domain.ClientFetchInterface) services.CalculationService {
+func (sm *serviceManager) GetCalculationService() services.CalculationService {
+	clientFetch := sm.GetClientFetchService()
 	calc := sm.GetCalculateService()
 	cs := services.GenCalculationService(clientFetch, calc)
 	return cs

@@ -39,8 +39,7 @@ func GetInterests(c *gin.Context) {
 
 	dm := models.GenIds(clientId, vm.GetCoborrowersIdSlice())
 
-	clientFetchService := Infrastructure.GetServiceManager().GetClientFetchService()
-	service := Infrastructure.GetServiceManager().GetCalculationService(clientFetchService)
+	service := Infrastructure.GetServiceManager().GetCalculationService()
 
 	ei, err := service.Calculate(dm)
 
