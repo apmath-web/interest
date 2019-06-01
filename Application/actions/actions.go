@@ -68,15 +68,15 @@ func GetInterests(c *gin.Context) {
 	ei, err := service.Calculate(dm)
 
 	if err != nil {
-		if err.Error() == "clients service not available" {
+		if err.Error() == Infrastructure.NotAvaliableMessage {
 			c.String(http.StatusInternalServerError, string(err.Error()))
 			return
 		}
-		if err.Error() == "bad request" {
+		if err.Error() == Infrastructure.BadRequestMessage {
 			c.String(http.StatusBadRequest, string(err.Error()))
 			return
 		}
-		if err.Error() == "client not found" {
+		if err.Error() == Infrastructure.NotFoundMessage {
 			c.String(http.StatusNotFound, string(err.Error()))
 			return
 		}
