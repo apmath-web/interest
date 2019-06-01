@@ -3,11 +3,12 @@ package Infrastructure
 import (
 	"encoding/json"
 	"errors"
+	"net/http"
+	"strconv"
+
 	"github.com/apmath-web/interests/Domain"
 	"github.com/apmath-web/interests/Infrastructure/Mappers"
 	"github.com/apmath-web/interests/Infrastructure/applicationModels"
-	"net/http"
-	"strconv"
 )
 
 type clientFetchService struct {
@@ -23,7 +24,7 @@ func GenClientFetchService(host string, port string, version string) Domain.Clie
 func (clfs *clientFetchService) Fetch(id int) (Domain.PersonDomainModelInterface, error) {
 	resp, err := http.Get(clfs.url + strconv.Itoa(id))
 	if resp == nil {
-		return nil, errors.New("clients service not available")
+		return nil, errors.New(NotAvaliableMessage)
 	}
 	if err != nil {
 		return nil, err
@@ -38,10 +39,10 @@ func (clfs *clientFetchService) Fetch(id int) (Domain.PersonDomainModelInterface
 		}
 	}
 	if resp.StatusCode == http.StatusBadRequest {
-		return nil, errors.New("bad request")
+		return nil, errors.New(BadRequestMessage)
 	}
 	if resp.StatusCode == http.StatusNotFound {
-		return nil, errors.New("client not found")
+		return nil, errors.New(NotFoundMessage)
 	}
 	pdm := Mappers.PersonApplicationMapper(*person)
 	return pdm, nil

@@ -2,20 +2,33 @@ package actions
 
 import (
 	"encoding/json"
+	"net/http"
+	"strconv"
+
 	"github.com/apmath-web/interests/Application/Validation"
 	"github.com/apmath-web/interests/Application/viewModels"
 	"github.com/apmath-web/interests/Domain/models"
 	"github.com/apmath-web/interests/Infrastructure"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"strconv"
 )
 
 func GetInterests(c *gin.Context) {
 
 	clientId, err := strconv.Atoi(c.Param("clientId"))
 	if err != nil {
-		c.String(http.StatusBadRequest, string(err.Error()))
+		validator := Validation.GenValidation()
+		validator.SetMessage("Client id must be numeric")
+		str, _ := json.Marshal(validator)
+		c.String(http.StatusBadRequest, string(str))
+		return
+	}
+
+	if clientId < 0 {
+		validator := Validation.GenValidation()
+		validator.SetMessage("Param error")
+		validator.AddMessage(Validation.GenMessage("clientId", "Is negative"))
+		str, _ := json.Marshal(validator)
+		c.String(http.StatusBadRequest, string(str))
 		return
 	}
 
@@ -23,7 +36,7 @@ func GetInterests(c *gin.Context) {
 
 	if err := c.BindJSON(&vm); err != nil {
 		validator := Validation.GenValidation()
-		validator.SetMessage("validation error")
+		validator.SetMessage("Body error")
 		str, _ := json.Marshal(validator)
 		c.String(http.StatusBadRequest, string(str))
 		return
@@ -31,10 +44,21 @@ func GetInterests(c *gin.Context) {
 
 	if !vm.Validate() {
 		validator := vm.GetValidation()
-		validator.SetMessage("validation error")
+		validator.SetMessage("Validation error")
 		str, _ := json.Marshal(validator)
 		c.String(http.StatusBadRequest, string(str))
 		return
+	}
+
+	for _, id := range vm.CoborrowersIdSlice {
+		if clientId == id {
+			validator := Validation.GenValidation()
+			validator.SetMessage("Validation error")
+			validator.AddMessage(Validation.GenMessage("coBorrowers", "Client's ID is equal to coborrower's ID"))
+			str, _ := json.Marshal(validator)
+			c.String(http.StatusBadRequest, string(str))
+			return
+		}
 	}
 
 	dm := models.GenIds(clientId, vm.GetCoborrowersIdSlice())
@@ -44,15 +68,15 @@ func GetInterests(c *gin.Context) {
 	ei, err := service.Calculate(dm)
 
 	if err != nil {
-		if err.Error() == "clients service not available" {
+		if err.Error() == Infrastructure.NotAvaliableMessage {
 			c.String(http.StatusInternalServerError, string(err.Error()))
 			return
 		}
-		if err.Error() == "bad request" {
+		if err.Error() == Infrastructure.BadRequestMessage {
 			c.String(http.StatusBadRequest, string(err.Error()))
 			return
 		}
-		if err.Error() == "client not found" {
+		if err.Error() == Infrastructure.NotFoundMessage {
 			c.String(http.StatusNotFound, string(err.Error()))
 			return
 		}
