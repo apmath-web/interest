@@ -2,20 +2,33 @@ package actions
 
 import (
 	"encoding/json"
+	"net/http"
+	"strconv"
+
 	"github.com/apmath-web/interests/Application/Validation"
 	"github.com/apmath-web/interests/Application/viewModels"
 	"github.com/apmath-web/interests/Domain/models"
 	"github.com/apmath-web/interests/Infrastructure"
 	"github.com/gin-gonic/gin"
-	"net/http"
-	"strconv"
 )
 
 func GetInterests(c *gin.Context) {
 
 	clientId, err := strconv.Atoi(c.Param("clientId"))
 	if err != nil {
-		c.String(http.StatusBadRequest, string(err.Error()))
+		validator := Validation.GenValidation()
+		validator.SetMessage("param error")
+		str, _ := json.Marshal(validator)
+		c.String(http.StatusBadRequest, string(str))
+		return
+	}
+
+	if clientId < 0 {
+		validator := Validation.GenValidation()
+		validator.SetMessage("param error")
+		validator.AddMessage(Validation.GenMessage("clientId", "Is negative"))
+		str, _ := json.Marshal(validator)
+		c.String(http.StatusBadRequest, string(str))
 		return
 	}
 
@@ -23,7 +36,7 @@ func GetInterests(c *gin.Context) {
 
 	if err := c.BindJSON(&vm); err != nil {
 		validator := Validation.GenValidation()
-		validator.SetMessage("validation error")
+		validator.SetMessage("body error")
 		str, _ := json.Marshal(validator)
 		c.String(http.StatusBadRequest, string(str))
 		return
@@ -35,6 +48,17 @@ func GetInterests(c *gin.Context) {
 		str, _ := json.Marshal(validator)
 		c.String(http.StatusBadRequest, string(str))
 		return
+	}
+
+	for _, id := range vm.CoborrowersIdSlice {
+		if clientId == id {
+			validator := Validation.GenValidation()
+			validator.SetMessage("validation error")
+			validator.AddMessage(Validation.GenMessage("coBorrowers", "Client's ID is equal to coborrower's ID"))
+			str, _ := json.Marshal(validator)
+			c.String(http.StatusBadRequest, string(str))
+			return
+		}
 	}
 
 	dm := models.GenIds(clientId, vm.GetCoborrowersIdSlice())
