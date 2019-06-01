@@ -17,7 +17,7 @@ func GetInterests(c *gin.Context) {
 	clientId, err := strconv.Atoi(c.Param("clientId"))
 	if err != nil {
 		validator := Validation.GenValidation()
-		validator.SetMessage("param error")
+		validator.SetMessage("client id must be numeric")
 		str, _ := json.Marshal(validator)
 		c.String(http.StatusBadRequest, string(str))
 		return
